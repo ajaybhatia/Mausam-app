@@ -1,6 +1,7 @@
 package com.ajaybhatia.mausam;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 import net.aksingh.java.api.owm.CurrentWeatherData;
 import net.aksingh.java.api.owm.CurrentWeatherData.Main;
@@ -55,8 +56,13 @@ public class SecondActivity extends Activity {
 			TextView tvTemp = (TextView)findViewById(R.id.tvTempResult);
 			
 			tvCity.setText(city);
-			tvTemp.setText(String.valueOf(result.getMaxTemperature()));
+			tvTemp.setText(String.valueOf(toCelcius(result.getMaxTemperature())) + (char)0x00B0 + "C");
 		}
+	}
+	
+	private float toCelcius(float fahrenheit) {
+		DecimalFormat df = new DecimalFormat("0.00");
+		return Float.parseFloat(df.format((fahrenheit - 32) * 5.0f/9.0f));
 	}
 	
 	@Override
