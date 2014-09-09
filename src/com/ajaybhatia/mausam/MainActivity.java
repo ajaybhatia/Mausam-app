@@ -1,12 +1,16 @@
 package com.ajaybhatia.mausam;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 public class MainActivity extends Activity {
-
+	public final static String CITY = "com.ajaybhatia.mausam.CITY";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,5 +34,13 @@ public class MainActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	public void search(View view) {
+		Intent intent = new Intent(this, SecondActivity.class);
+		EditText etCity = (EditText)findViewById(R.id.etCity);
+		intent.putExtra(CITY, etCity.getText().toString());
+		
+		startActivity(intent);
 	}
 }

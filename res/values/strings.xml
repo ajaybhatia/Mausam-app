@@ -3,5 +3,9 @@
 
     <string name="app_name">Mausam</string>
     <string name="action_settings">Settings</string>
+    <string name="ic_city_name">City:</string>
+    <string name="ic_city_name_hint">Specify city to locate weather</string>
+    <string name="ic_btn_search">Search</string>
+    <string name="ic_temperature">Temperature:</string>
 
 </resources>
