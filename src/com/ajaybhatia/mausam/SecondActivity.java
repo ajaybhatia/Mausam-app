@@ -28,7 +28,7 @@ public class SecondActivity extends Activity {
 		city = intent.getStringExtra(MainActivity.CITY);
 		
 		WeatherTask task = new WeatherTask();
-		task.execute(new String[]{city});
+		task.execute(new String[]{city, "IN"});
 	}
 
 	private class WeatherTask extends AsyncTask<String, Void, CurrentWeatherData> {
@@ -38,7 +38,8 @@ public class SecondActivity extends Activity {
 			
 			try {
 				OpenWeatherMap owm = new OpenWeatherMap("");
-				cwd = owm.currentWeatherByCityName(params[0]);
+				cwd = owm.currentWeatherByCityName(params[0], params[1]);
+				
 			} catch (IOException | JSONException ex) {}
 
 			return cwd;
@@ -50,15 +51,26 @@ public class SecondActivity extends Activity {
 			
 			TextView tvCity = (TextView)findViewById(R.id.tvCityResult);
 			TextView tvTemp = (TextView)findViewById(R.id.tvTempResult);
+			TextView tvPres = (TextView)findViewById(R.id.tvPressureResult);
+			TextView tvHumi = (TextView)findViewById(R.id.tvHumidityResult);
 			
 			tvCity.setText(cwd.getCityName());
 			tvTemp.setText(String.valueOf(toCelcius(cwd.getMainData_Object().getTemperature())) + (char)0x00B0 + "C");
+			tvPres.setText(String.valueOf(toInchMercury(cwd.getMainData_Object().getPressure())) + " Hg");
+			tvHumi.setText(String.valueOf(cwd.getMainData_Object().getHumidity()) + " %");
+		
+			 
 		}
 	}
 	
 	private float toCelcius(float fahrenheit) {
 		DecimalFormat df = new DecimalFormat("0.00");
 		return Float.parseFloat(df.format((fahrenheit - 32) * 5.0f/9.0f));
+	}
+	
+	private float toInchMercury(float milliBar) {
+		DecimalFormat df = new DecimalFormat("0.00");
+		return Float.parseFloat(df.format(milliBar * 0.0295301f));
 	}
 	
 	@Override
