@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 
 import net.aksingh.java.api.owm.CurrentWeatherData;
-import net.aksingh.java.api.owm.CurrentWeatherData.Main;
 import net.aksingh.java.api.owm.OpenWeatherMap;
 
 import org.json.JSONException;
@@ -13,11 +12,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SecondActivity extends Activity {
 	private String city;
@@ -34,29 +31,28 @@ public class SecondActivity extends Activity {
 		task.execute(new String[]{city});
 	}
 
-	private class WeatherTask extends AsyncTask<String, Void, Main> {
+	private class WeatherTask extends AsyncTask<String, Void, CurrentWeatherData> {
 
-		protected Main doInBackground(String... params) {
-			Main main = null;
+		protected CurrentWeatherData doInBackground(String... params) {
+			CurrentWeatherData cwd = null;
 			
 			try {
 				OpenWeatherMap owm = new OpenWeatherMap("");
-				CurrentWeatherData cwd = owm.currentWeatherByCityName(params[0]);
-				main = cwd.getMainData_Object();
+				cwd = owm.currentWeatherByCityName(params[0]);
 			} catch (IOException | JSONException ex) {}
 
-			return main;
+			return cwd;
 		}
 		
 		@Override
-		protected void onPostExecute(Main result) {
-			super.onPostExecute(result);
+		protected void onPostExecute(CurrentWeatherData cwd) {
+			super.onPostExecute(cwd);
 			
 			TextView tvCity = (TextView)findViewById(R.id.tvCityResult);
 			TextView tvTemp = (TextView)findViewById(R.id.tvTempResult);
 			
-			tvCity.setText(city);
-			tvTemp.setText(String.valueOf(toCelcius(result.getMaxTemperature())) + (char)0x00B0 + "C");
+			tvCity.setText(cwd.getCityName());
+			tvTemp.setText(String.valueOf(toCelcius(cwd.getMainData_Object().getTemperature())) + (char)0x00B0 + "C");
 		}
 	}
 	
